@@ -1,6 +1,5 @@
 from aiogram.utils import executor
 from create_bot import dp
-from aiogram.utils.executor import start_webhook
 from handlers import client_handlers
 #import asyncio, aioschedule
 
