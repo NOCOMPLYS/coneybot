@@ -19,7 +19,6 @@ async def start_command(message: types.Message):
     for m in db.get_users():
         users.append(m[0])
     if user not in users:
-        db.add_user(user_id=message.from_user.id, nickname=message.from_user.username)
         await bot.send_message(message.from_user.id, 'Приветствую! 👋\nЗдесь вы можете пройти регистрацию на бесплатный онлайн вебинар.')
         await bot.send_message(message.from_user.id, 'Как вас зовут?')
     else:
@@ -61,7 +60,8 @@ async def no_type_message(message: types.Message):
             for bot_user in users:
                 await bot.send_message(bot_user, message.text)
             await bot.send_message(user, 'Сообщение успешно разослано пользователям!')
-
+    if user not in users:
+        db.add_user(user_id=message.from_user.id, nickname=message.from_user.username)
     if user in users and db.get_name(user)[0] == None:
         db.set_name(user, message.text)
         await bot.send_message(message.from_user.id, 'Приятно познакомиться! Подскажи, сколько тебе лет?')
