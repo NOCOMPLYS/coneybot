@@ -22,6 +22,10 @@ async def start_command(message: types.Message):
         db.add_user(user_id=message.from_user.id, nickname=message.from_user.username)
         await bot.send_message(message.from_user.id, 'Приветствую! 👋\nЗдесь вы можете пройти регистрацию на бесплатный онлайн вебинар.')
         await bot.send_message(message.from_user.id, 'Как вас зовут?')
+    else:
+        await bot.send_message(message.from_user.id, 'Вы уже зарегистрированы.')
+        await bot.send_message(message.from_user.id, '🔔 Не забудьте включить уведомления, чтобы не пропусить напоминание о вебинаре.')
+
 
 async def send_sql_db(message: types.Message):
     admins = []
@@ -69,6 +73,8 @@ async def no_type_message(message: types.Message):
         else:
             await bot.send_message(message.from_user.id, 'Я тебя не понял. Пришли мне свой возраст числом.')
     
+
+
 def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_message_handler(send_sql_db, commands=['sql'])
