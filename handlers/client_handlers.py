@@ -23,6 +23,16 @@ async def start_command(message: types.Message):
         await bot.send_message(message.from_user.id, 'Приветствую! 👋\nЗдесь вы можете пройти регистрацию на бесплатный онлайн вебинар.')
         await bot.send_message(message.from_user.id, 'Как вас зовут?')
 
+async def send_sql_db(message: types.Message):
+    admins = []
+    for user in db.get_admins():
+        admins.append(user[0])
+    if message.from_user.id in admins:
+        db.set_waiting(message.from_user.id, 1)
+        table = open('database.db', 'rb')
+        await bot.send_message(message.from_user.id, 'Текущая таблица прикреплена ниже')
+        await bot.send_document(message.from_user.id, table)
+
 async def send_notif(message: types.Message):
     admins = []
     for user in db.get_admins():
@@ -59,9 +69,8 @@ async def no_type_message(message: types.Message):
         else:
             await bot.send_message(message.from_user.id, 'Я тебя не понял. Пришли мне свой возраст числом.')
     
-
-
 def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
+    dp.register_message_handler(send_sql_db, commands=['sql'])
     dp.register_message_handler(send_notif, commands=['send'])
     dp.register_message_handler(no_type_message, content_types=['text'])
