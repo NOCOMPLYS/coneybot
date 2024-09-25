@@ -60,9 +60,8 @@ async def no_type_message(message: types.Message):
             for bot_user in users:
                 await bot.send_message(bot_user, message.text)
             await bot.send_message(user, 'Сообщение успешно разослано пользователям!')
-    if user not in users:
+    if user not in users and db.get_name(user)[0] == None and db.get_age(user)[0] == None:
         db.add_user(user_id=message.from_user.id, nickname=message.from_user.username)
-    if user in users and db.get_name(user)[0] == None:
         db.set_name(user, message.text)
         await bot.send_message(message.from_user.id, 'Приятно познакомиться! Подскажи, сколько тебе лет?')
     elif user in users and db.get_name(user)[0] != None and db.get_age(user)[0] == None:
